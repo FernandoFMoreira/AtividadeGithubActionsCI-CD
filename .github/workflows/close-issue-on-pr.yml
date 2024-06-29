@@ -23,8 +23,7 @@ jobs:
           PR_NUMBER=${{ github.event.pull_request.number }}
           PR_BODY=$(gh pr view $PR_NUMBER --json body -q .body)
           
-          # Assume a sintaxe "Fixes #<numero_issue>"
-          ISSUE_NUMBERS=$(echo "$PR_BODY" | grep -oE '#[0-9]+' | tr -d '#')
+          ISSUE_NUMBERS=$(echo "$PR_BODY" | grep -ioE 'fixes #([0-9]+)|closes #([0-9]+)|resolves #([0-9]+)|fix #([0-9]+)|close #([0-9]+)|resolve #([0-9]+)' | grep -oE '[0-9]+')
           
           for ISSUE_NUMBER in $ISSUE_NUMBERS; do
             gh issue close $ISSUE_NUMBER --comment "Closed by PR #${PR_NUMBER} which has been merged."
