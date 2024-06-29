@@ -1,7 +1,7 @@
 function calculate(expression) {
     try {
         const result = eval(expression); 
-        if (result === 'Infinity') return 'Error';
+        if (!isFinite(result)) return 'Error';
         return result;
     } catch {
         return 'Error';
@@ -24,8 +24,9 @@ function init() {
             }
 
             if (buttonText === '=') {
-                calculation = calculate(calculation);
-                display.value = calculation;
+                const result = calculate(calculation);
+                display.value = result;
+                calculation = '';
                 return;
             }
 
